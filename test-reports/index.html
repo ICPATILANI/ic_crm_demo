@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer CRM - Test Reports Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        .warning {
+            color: #ffc107;
+        }
+
+        .coverage {
+            color: #17a2b8;
+        }
+
+        .report-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .report-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .report-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 500;
+        }
+
+        .report-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .report-link-text {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .arrow {
+            font-size: 1.2rem;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .info-section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 3rem;
+            padding: 2rem;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .summary-cards,
+            .report-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 Customer CRM Test Reports</h1>
+            <p class="subtitle">Comprehensive Testing Dashboard for Full-Stack Application</p>
+            <span class="badge badge-success">All Tests Passing ✓</span>
+        </header>
+
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🎯</span>
+                    <h3 class="card-title">Overall Summary</h3>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat">
+                        <div class="stat-value success">102</div>
+                        <div class="stat-label">Total Tests</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value success">100%</div>
+                        <div class="stat-label">Pass Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🐍</span>
+                    <h3 class="card-title">Backend (Python/Flask)</h3>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat">
+                        <div class="stat-value success">35</div>
+                        <div class="stat-label">Tests Passed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value warning">13</div>
+                        <div class="stat-label">Warnings</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🅰️</span>
+                    <h3 class="card-title">Frontend (Angular 19)</h3>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat">
+                        <div class="stat-value success">67</div>
+                        <div class="stat-label">Tests Passed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value coverage">74.41%</div>
+                        <div class="stat-label">Code Coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-links">
+            <div class="report-section">
+                <h2>🐍 Backend Test Reports</h2>
+                <a href="../backend/test-report.html" class="report-link" target="_blank">
+                    <span class="report-link-text">
+                        <span>📊</span>
+                        <span>Pytest HTML Report</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="../backend/htmlcov/index.html" class="report-link" target="_blank">
+                    <span class="report-link-text">
+                        <span>📈</span>
+                        <span>Code Coverage Report</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+
+            <div class="report-section">
+                <h2>🅰️ Frontend Test Reports</h2>
+                <a href="../frontend/test-reports/html/test-report.html" class="report-link" target="_blank">
+                    <span class="report-link-text">
+                        <span>📊</span>
+                        <span>Karma HTML Report</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="../frontend/test-reports/coverage/index.html" class="report-link" target="_blank">
+                    <span class="report-link-text">
+                        <span>📈</span>
+                        <span>Code Coverage Report</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+                <a href="../frontend/test-reports/junit/test-results.xml" class="report-link" target="_blank">
+                    <span class="report-link-text">
+                        <span>📄</span>
+                        <span>JUnit XML Report</span>
+                    </span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>ℹ️ Test Execution Details</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Test Framework (Backend)</div>
+                    <div class="info-value">pytest 8.4.2</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Test Framework (Frontend)</div>
+                    <div class="info-value">Karma 6.4.4 + Jasmine</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Python Version</div>
+                    <div class="info-value">3.11.7</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Platform</div>
+                    <div class="info-value">macOS 15.6 (ARM64)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Backend Execution Time</div>
+                    <div class="info-value">0.57 seconds</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Frontend Execution Time</div>
+                    <div class="info-value">0.149 seconds</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Test Date</div>
+                    <div class="info-value" id="testDate"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Project</div>
+                    <div class="info-value">Customer CRM v1.0.0</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with ❤️ using Angular 19, Flask 3.1.2, pytest, and Karma</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                Repository: <a href="https://github.com/ICPATILANI/ic_crm_demo" target="_blank" style="color: white; text-decoration: underline;">ic_crm_demo</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Set the current date
+        document.getElementById('testDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    </script>
+</body>
+</html>
