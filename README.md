@@ -125,7 +125,7 @@ Open your browser and navigate to: **http://localhost:4200**
 
 ## 🧪 Testing
 
-The application includes a comprehensive pytest test suite with 35 tests covering all functionality.
+The application includes a comprehensive pytest test suite with 57 tests covering all functionality.
 
 ### Test Suite Overview
 - **test_app.py**: 21 API endpoint tests
@@ -162,7 +162,7 @@ pytest -v
 
 Expected output:
 ```
-35 passed in 0.42s
+57 passed in 0.81s
 ```
 
 #### Run Tests with Coverage Report
@@ -527,8 +527,8 @@ start test-reports/index.html
 ```
 
 The dashboard provides:
-- **Overall Summary**: 102 total tests, 100% pass rate
-- **Backend Reports**: pytest HTML report and code coverage (35 tests)
+- **Overall Summary**: 124 total tests, 100% pass rate
+- **Backend Reports**: pytest HTML report and code coverage (57 tests)
 - **Frontend Reports**: Karma HTML report, code coverage, and JUnit XML (67 tests)
 - **Execution Details**: Platform info, execution times, test frameworks
 
@@ -567,7 +567,7 @@ For detailed documentation on test reports, see [test-reports/README.md](test-re
 - [ ] Dashboard with analytics
 - [ ] PostgreSQL migration for production
 - [ ] Docker containerization
-- [x] ✅ Backend tests: pytest suite (35 tests, 100% pass rate)
+- [x] ✅ Backend tests: pytest suite (57 tests, 100% pass rate)
 - [x] ✅ Frontend tests: Karma/Jasmine suite (67 tests, 100% pass rate)
 - [x] ✅ HTML test reports with dashboard
 
