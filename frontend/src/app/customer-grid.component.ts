@@ -22,6 +22,8 @@ import { CustomerService, Customer } from './customer.service';
 import { ColDef, ModuleRegistry, AllCommunityModule, GridApi } from 'ag-grid-community';
 import { AgGridModule } from 'ag-grid-angular';
 import { FormsModule } from '@angular/forms';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 // Register AG Grid Community modules globally
 // CRITICAL: Must be done before component initialization to avoid "Grid API not available" errors
@@ -96,6 +98,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
             </button>
             <button class="btn btn-primary btn-sm" (click)="exportToExcel()" title="Export to Excel">
               <span class="btn-icon">📗</span> Export Excel
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="exportToPDF()" title="Export to PDF">
+              <span class="btn-icon">📄</span> Export PDF
             </button>
             <button class="btn btn-info btn-sm" *ngIf="selectedCustomer" (click)="viewRelationship(selectedCustomer)">
               <span class="btn-icon">🔗</span> View Relationships
@@ -937,6 +942,119 @@ export class CustomerGridComponent implements OnInit, AfterViewInit {
       }
     });
     console.log('Customer data exported to Excel format');
+  }
+
+  /**
+   * Export customer data to PDF format
+   * 
+   * Creates a professionally formatted PDF document with:
+   * - Company header with gradient styling
+   * - Document title and metadata
+   * - Formatted table with all customer data
+   * - Auto-generated filename with timestamp
+   */
+  exportToPDF() {
+    if (!this.gridApi) {
+      console.error('Grid API not available');
+      return;
+    }
+
+    // Create new PDF document (A4 size, portrait orientation)
+    const doc = new jsPDF();
+    
+    // Document title and metadata
+    const timestamp = new Date().toISOString().split('T')[0];
+    const title = 'Customer CRM - Customer Report';
+    
+    // Add gradient header background (simulated with colored rectangle)
+    doc.setFillColor(119, 2, 255); // Purple gradient start
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    // Add company logo/icon (using text as emoji)
+    doc.setFontSize(24);
+    doc.setTextColor(255, 255, 255);
+    doc.text('👥', 10, 20);
+    
+    // Add title
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text(title, 30, 20);
+    
+    // Add subtitle with date
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Generated: ${new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })}`, 30, 28);
+    
+    // Add total count
+    doc.text(`Total Customers: ${this.customers.length}`, 30, 35);
+    
+    // Prepare table data
+    const headers = [['Name', 'Email', 'Phone', 'Entity Level', 'Parent']];
+    const data = this.customers.map(customer => [
+      customer.name || '',
+      customer.email || '',
+      customer.phone || '',
+      customer.entity_level || '',
+      customer.parent_name || 'None'
+    ]);
+    
+    // Add table with autoTable plugin
+    autoTable(doc, {
+      head: headers,
+      body: data,
+      startY: 45,
+      theme: 'grid',
+      styles: {
+        fontSize: 9,
+        cellPadding: 3,
+      },
+      headStyles: {
+        fillColor: [102, 126, 234], // Purple header
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        halign: 'left'
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 250]
+      },
+      columnStyles: {
+        0: { cellWidth: 40 },  // Name
+        1: { cellWidth: 50 },  // Email
+        2: { cellWidth: 30 },  // Phone
+        3: { cellWidth: 30 },  // Entity Level
+        4: { cellWidth: 35 }   // Parent
+      },
+      margin: { top: 45, left: 10, right: 10 },
+      didDrawPage: (data) => {
+        // Add footer with page numbers
+        const pageCount = doc.getNumberOfPages();
+        const pageNumber = data.pageNumber;
+        
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text(
+          `Page ${pageNumber} of ${pageCount}`,
+          doc.internal.pageSize.getWidth() / 2,
+          doc.internal.pageSize.getHeight() - 10,
+          { align: 'center' }
+        );
+        
+        // Add footer text
+        doc.text(
+          'Customer CRM © 2025 - Confidential',
+          10,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
+    });
+    
+    // Save the PDF
+    doc.save(`customers_report_${timestamp}.pdf`);
+    console.log('Customer data exported to PDF');
   }
 
   // ============================================================================
