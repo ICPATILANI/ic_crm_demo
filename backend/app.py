@@ -181,17 +181,32 @@ def create_customer():
         Response: {id: 3, name: "John Doe", ...}
     """
     data = request.json
-    customer = Customer(
-        name=data.get('name'),
-        email=data.get('email'),
-        phone=data.get('phone'),
-        address=data.get('address'),
-        entity_level=data.get('entity_level', 'individual'),  # Default to 'individual' if not specified
-        parent_id=data.get('parent_id')  # None for root-level customers
-    )
-    db.session.add(customer)
-    db.session.commit()
-    return jsonify(customer.to_dict()), 201
+    
+    # Validate required fields
+    if not data or not data.get('name') or not data.get('email'):
+        return jsonify({'error': 'Name and email are required fields'}), 400
+    
+    try:
+        customer = Customer(
+            name=data.get('name'),
+            email=data.get('email'),
+            phone=data.get('phone'),
+            address=data.get('address'),
+            entity_level=data.get('entity_level', 'individual'),  # Default to 'individual' if not specified
+            parent_id=data.get('parent_id')  # None for root-level customers
+        )
+        db.session.add(customer)
+        db.session.commit()
+        return jsonify(customer.to_dict()), 201
+    except Exception as e:
+        db.session.rollback()
+        # Check for unique constraint violation
+        if 'UNIQUE constraint failed' in str(e) or 'duplicate key' in str(e).lower():
+            return jsonify({'error': 'Email address already exists'}), 400
+        # Check for other constraint violations
+        if 'constraint' in str(e).lower():
+            return jsonify({'error': 'Data validation failed', 'details': str(e)}), 400
+        return jsonify({'error': 'Failed to create customer', 'details': str(e)}), 500
 
 @app.route('/customers/<int:id>', methods=['PUT'])
 def update_customer(id):
@@ -217,14 +232,21 @@ def update_customer(id):
     customer = Customer.query.get_or_404(id)
     data = request.json
     # Update fields only if provided in request (preserves existing values)
-    customer.name = data.get('name', customer.name)
-    customer.email = data.get('email', customer.email)
-    customer.phone = data.get('phone', customer.phone)
-    customer.address = data.get('address', customer.address)
-    customer.entity_level = data.get('entity_level', customer.entity_level)
-    customer.parent_id = data.get('parent_id')  # Allow setting to None to remove parent
-    db.session.commit()
-    return jsonify(customer.to_dict())
+    try:
+        customer.name = data.get('name', customer.name)
+        customer.email = data.get('email', customer.email)
+        customer.phone = data.get('phone', customer.phone)
+        customer.address = data.get('address', customer.address)
+        customer.entity_level = data.get('entity_level', customer.entity_level)
+        customer.parent_id = data.get('parent_id')  # Allow setting to None to remove parent
+        db.session.commit()
+        return jsonify(customer.to_dict())
+    except Exception as e:
+        db.session.rollback()
+        # Check for unique constraint violation
+        if 'UNIQUE constraint failed' in str(e) or 'duplicate key' in str(e).lower():
+            return jsonify({'error': 'Email address already exists'}), 400
+        return jsonify({'error': 'Failed to update customer', 'details': str(e)}), 500
 
 @app.route('/customers/<int:id>', methods=['DELETE'])
 def delete_customer(id):
