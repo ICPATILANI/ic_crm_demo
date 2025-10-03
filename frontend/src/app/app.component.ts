@@ -15,12 +15,14 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   title = 'Customer CRM';
   showAboutModal = false;
+  showMobileMenu = false;
 
   /**
    * Open the About modal
    */
   openAbout() {
     this.showAboutModal = true;
+    this.showMobileMenu = false;
   }
 
   /**
@@ -28,5 +30,19 @@ export class AppComponent {
    */
   closeAbout() {
     this.showAboutModal = false;
+  }
+
+  /**
+   * Toggle the hamburger menu
+   */
+  toggleMenu() {
+    this.showMobileMenu = !this.showMobileMenu;
+  }
+
+  /**
+   * Close the hamburger menu
+   */
+  closeMenu() {
+    this.showMobileMenu = false;
   }
 }
