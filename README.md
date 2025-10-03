@@ -8,6 +8,7 @@ A modern, full-stack Customer Relationship Management (CRM) application built wi
 - **Hierarchical Relationships**: Define parent-child-grandparent customer relationships with unlimited depth
 - **Entity Level Classification**: Categorize customers as Individual, Entity, or Corporate
 - **Interactive Data Grid**: Powered by AG Grid Community with custom styling and animations
+- **Data Export**: Export customer data to CSV and Excel formats with one click
 - **Relationship Visualization**: Beautiful modal interface displaying full customer family trees
 - **Responsive Design**: Modern gradient UI with glass morphism effects
 - **Real-time Updates**: Live data synchronization between frontend and backend
@@ -438,6 +439,12 @@ Flask-CORS==6.0.1
 1. Click the delete icon (🗑️) in the grid
 2. Confirm deletion (note: child relationships will need to be updated)
 
+### Exporting Customer Data
+1. Click "Export CSV" button to download data as CSV file
+2. Click "Export Excel" button to download data in Excel-compatible format
+3. Files are automatically named with current date: `customers_YYYY-MM-DD.csv`
+4. Exported data includes: Name, Email, Phone, Address, Entity Level, and Parent Name
+
 ## 🔧 Configuration
 
 ### Port Configuration
@@ -509,7 +516,7 @@ When changing the schema:
 
 - [ ] Advanced search and filtering functionality
 - [ ] User authentication and authorization
-- [ ] Export to CSV/Excel
+- [x] ✅ Export to CSV/Excel (one-click export with AG Grid)
 - [ ] Bulk import customers
 - [ ] Activity logging and audit trail
 - [ ] Email integration

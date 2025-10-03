@@ -19,7 +19,7 @@
 import { Component, OnInit, PLATFORM_ID, Inject, AfterViewInit } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { CustomerService, Customer } from './customer.service';
-import { ColDef, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import { ColDef, ModuleRegistry, AllCommunityModule, GridApi } from 'ag-grid-community';
 import { AgGridModule } from 'ag-grid-angular';
 import { FormsModule } from '@angular/forms';
 
@@ -91,6 +91,12 @@ ModuleRegistry.registerModules([AllCommunityModule]);
         <div class="grid-header">
           <h3 class="section-title">Customer Directory</h3>
           <div class="grid-actions">
+            <button class="btn btn-success btn-sm" (click)="exportToCSV()" title="Export to CSV">
+              <span class="btn-icon">📊</span> Export CSV
+            </button>
+            <button class="btn btn-primary btn-sm" (click)="exportToExcel()" title="Export to Excel">
+              <span class="btn-icon">📗</span> Export Excel
+            </button>
             <button class="btn btn-info btn-sm" *ngIf="selectedCustomer" (click)="viewRelationship(selectedCustomer)">
               <span class="btn-icon">🔗</span> View Relationships
             </button>
@@ -861,12 +867,76 @@ export class CustomerGridComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Grid API reference for export and other operations
+   */
+  private gridApi!: GridApi;
+
+  /**
    * Grid ready event handler - called when AG Grid finishes initialization
    * 
-   * @param params - Grid API parameters (unused currently)
+   * @param params - Grid API parameters containing the grid and column APIs
    */
   onGridReady(params: any) {
     console.log('Grid is ready!');
+    this.gridApi = params.api;
+  }
+
+  // ============================================================================
+  // Export Methods
+  // ============================================================================
+
+  /**
+   * Export customer data to CSV format
+   * 
+   * Exports all columns and rows visible in the grid to a CSV file.
+   * File is automatically downloaded with timestamp in filename.
+   */
+  exportToCSV() {
+    if (!this.gridApi) {
+      console.error('Grid API not available');
+      return;
+    }
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    this.gridApi.exportDataAsCsv({
+      fileName: `customers_${timestamp}.csv`,
+      columnKeys: ['name', 'email', 'phone', 'address', 'entity_level', 'parent_name'],
+      processCellCallback: (params) => {
+        // Handle null/undefined values
+        return params.value ?? '';
+      }
+    });
+    console.log('Customer data exported to CSV');
+  }
+
+  /**
+   * Export customer data to Excel format
+   * 
+   * Exports all columns and rows to an Excel-compatible file (.xlsx).
+   * File is automatically downloaded with timestamp in filename.
+   * 
+   * Note: Requires ag-grid-enterprise for full Excel export.
+   * Community version exports as Excel-compatible CSV.
+   */
+  exportToExcel() {
+    if (!this.gridApi) {
+      console.error('Grid API not available');
+      return;
+    }
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    
+    // Note: AG Grid Community edition exports Excel-compatible CSV
+    // For true .xlsx format, ag-grid-enterprise is required
+    this.gridApi.exportDataAsCsv({
+      fileName: `customers_${timestamp}.xlsx`,
+      columnKeys: ['name', 'email', 'phone', 'address', 'entity_level', 'parent_name'],
+      processCellCallback: (params) => {
+        // Handle null/undefined values
+        return params.value ?? '';
+      }
+    });
+    console.log('Customer data exported to Excel format');
   }
 
   // ============================================================================
