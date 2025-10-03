@@ -294,7 +294,7 @@ npm test -- --code-coverage
 
 Expected output:
 ```
-Chrome Headless: Executed 62 of 62 SUCCESS
+Chrome Headless: Executed 67 of 67 SUCCESS
 ```
 
 #### Run Tests in Watch Mode (Development)
@@ -513,7 +513,50 @@ When changing the schema:
 - Frontend: Add methods in `customer.service.ts`
 - UI: Update `customer-grid.component.ts`
 
-## 🚀 Future Enhancements
+## � HTML Test Reports
+
+The project includes comprehensive HTML test reports with a centralized dashboard for easy viewing of all test results.
+
+### View Test Reports Dashboard
+```bash
+# Open the test reports dashboard in your browser
+open test-reports/index.html
+
+# Or on Windows
+start test-reports/index.html
+```
+
+The dashboard provides:
+- **Overall Summary**: 102 total tests, 100% pass rate
+- **Backend Reports**: pytest HTML report and code coverage (35 tests)
+- **Frontend Reports**: Karma HTML report, code coverage, and JUnit XML (67 tests)
+- **Execution Details**: Platform info, execution times, test frameworks
+
+### Generate Fresh Test Reports
+
+**Backend (pytest with HTML + coverage):**
+```bash
+cd backend
+pytest --html=test-report.html --self-contained-html --cov=. --cov-report=html
+```
+
+**Frontend (Karma with HTML + coverage):**
+```bash
+cd frontend
+npm test -- --watch=false --code-coverage --browsers=ChromeHeadless
+```
+
+### Available Reports
+- **Dashboard**: `test-reports/index.html` - Central hub for all reports
+- **Backend Test Report**: `backend/test-report.html` - pytest execution results
+- **Backend Coverage**: `backend/htmlcov/index.html` - Code coverage analysis
+- **Frontend Test Report**: `frontend/test-reports/html/test-report.html` - Karma results
+- **Frontend Coverage**: `frontend/test-reports/coverage/index.html` - Code coverage
+- **JUnit XML**: `frontend/test-reports/junit/test-results.xml` - CI/CD format
+
+For detailed documentation on test reports, see [test-reports/README.md](test-reports/README.md)
+
+## �🚀 Future Enhancements
 
 - [ ] Advanced search and filtering functionality
 - [ ] User authentication and authorization
@@ -525,7 +568,8 @@ When changing the schema:
 - [ ] PostgreSQL migration for production
 - [ ] Docker containerization
 - [x] ✅ Backend tests: pytest suite (35 tests, 100% pass rate)
-- [x] ✅ Frontend tests: Karma/Jasmine suite (62 tests, 100% pass rate)
+- [x] ✅ Frontend tests: Karma/Jasmine suite (67 tests, 100% pass rate)
+- [x] ✅ HTML test reports with dashboard
 
 ## 📄 License
 
