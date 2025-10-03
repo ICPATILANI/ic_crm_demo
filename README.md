@@ -121,6 +121,133 @@ Open your browser and navigate to: **http://localhost:4200**
 ### Health Check
 - `GET /` - API health check
 
+## 🧪 Testing
+
+The application includes a comprehensive pytest test suite with 35 tests covering all functionality.
+
+### Test Suite Overview
+- **test_app.py**: 21 API endpoint tests
+  - Health check validation
+  - CRUD operations (GET, POST, PUT, DELETE)
+  - Hierarchical relationship queries
+  - Error handling and validation
+  - CORS configuration
+  - Data integrity constraints
+
+- **test_models.py**: 14 database model tests
+  - Customer model creation and serialization
+  - Parent-child relationships
+  - Multi-level hierarchies (3+ levels)
+  - Database constraints (unique email, required fields)
+  - Query and filter operations
+
+### Running Tests
+
+#### Install Test Dependencies
+```bash
+# From backend directory
+cd backend
+
+# Install testing packages
+pip3 install --index-url https://pypi.org/simple pytest pytest-flask pytest-cov
+```
+
+#### Run All Tests
+```bash
+# From backend directory
+pytest -v
+```
+
+Expected output:
+```
+35 passed in 0.42s
+```
+
+#### Run Tests with Coverage Report
+```bash
+# Generate HTML coverage report
+pytest --cov=app --cov-report=html --cov-report=term-missing
+
+# View report in browser
+open htmlcov/index.html
+```
+
+#### Run Specific Test Categories
+```bash
+# Run only API tests
+pytest test_app.py -v
+
+# Run only model tests
+pytest test_models.py -v
+
+# Run tests matching a pattern
+pytest -k "hierarchy" -v
+
+# Run tests with specific markers (if configured)
+pytest -m "unit" -v
+```
+
+#### Test Configuration
+The `pytest.ini` file configures test discovery and execution:
+- Test files: `test_*.py`
+- Test functions: `test_*`
+- Output: Verbose with short tracebacks
+- Custom markers: unit, integration, database, hierarchy
+
+### Test Coverage
+Current test coverage includes:
+- ✅ All API endpoints (GET, POST, PUT, DELETE)
+- ✅ Customer creation with validation
+- ✅ Hierarchical relationships (parent-child)
+- ✅ Error handling (missing fields, duplicate emails)
+- ✅ Data integrity constraints
+- ✅ CORS headers
+- ✅ Database queries and filters
+- ✅ Model serialization and deserialization
+- ✅ Multi-level relationship traversal
+
+### Writing New Tests
+To add new tests, follow these patterns:
+
+**API Endpoint Test Example:**
+```python
+def test_my_new_endpoint(client):
+    """Test description"""
+    response = client.get('/my-endpoint')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'expected_key' in data
+```
+
+**Model Test Example:**
+```python
+def test_my_model_feature(app_context):
+    """Test description"""
+    customer = Customer(name="Test", email="test@example.com")
+    db.session.add(customer)
+    db.session.commit()
+    assert customer.id is not None
+```
+
+### Continuous Integration
+For automated testing in CI/CD pipelines:
+
+**GitHub Actions Example:**
+```yaml
+- name: Run Tests
+  run: |
+    cd backend
+    pip install pytest pytest-flask pytest-cov
+    pytest --cov=app --cov-report=xml
+```
+
+### Test Database
+Tests use an in-memory SQLite database (`:memory:`), ensuring:
+- Fast test execution (no disk I/O)
+- Isolated test environment (no impact on production database)
+- Clean state for each test (database recreated per test)
+- No cleanup required after tests
+
 ## 🎨 Key Features Explained
 
 ### Hierarchical Relationships
@@ -273,7 +400,7 @@ When changing the schema:
 - [ ] Dashboard with analytics
 - [ ] PostgreSQL migration for production
 - [ ] Docker containerization
-- [ ] Unit and integration tests
+- [x] ✅ Unit and integration tests (35 tests with 100% pass rate)
 
 ## 📄 License
 
