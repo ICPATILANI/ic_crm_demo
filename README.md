@@ -248,6 +248,122 @@ Tests use an in-memory SQLite database (`:memory:`), ensuring:
 - Clean state for each test (database recreated per test)
 - No cleanup required after tests
 
+## 🧪 Frontend Testing (Angular)
+
+The Angular application includes comprehensive Karma/Jasmine tests with 62 tests covering all functionality.
+
+### Test Suite Overview
+- **customer.service.spec.ts**: 22 service tests
+  - HTTP request generation
+  - API endpoint calls (GET, POST, PUT, DELETE)
+  - Request/response handling
+  - Error scenarios (404, 400, 500)
+  - Hierarchy endpoint testing
+
+- **customer-grid.component.spec.ts**: 37 component tests
+  - Component initialization and lifecycle
+  - CRUD operations integration
+  - Form validation and user interactions
+  - Relationship modal functionality
+  - Grid configuration and data binding
+  - SSR platform browser checks
+
+- **app.component.spec.ts**: 3 app-level tests
+  - Component creation
+  - Template rendering
+  - Dependency injection
+
+### Running Angular Tests
+
+#### Run All Tests
+```bash
+# From frontend directory
+cd frontend
+
+# Run tests in headless Chrome
+npm test
+
+# Run tests once without watch mode
+npm test -- --watch=false
+
+# Run with code coverage
+npm test -- --code-coverage
+```
+
+Expected output:
+```
+Chrome Headless: Executed 62 of 62 SUCCESS
+```
+
+#### Run Tests in Watch Mode (Development)
+```bash
+# Tests will re-run on file changes
+npm test -- --watch=true
+```
+
+#### Run Tests with Coverage Report
+```bash
+# Generate coverage report
+npm test -- --code-coverage --watch=false
+
+# View coverage report in browser
+open coverage/index.html
+```
+
+### Test Configuration
+Tests are configured in:
+- `karma.conf.js` - Karma test runner configuration
+- `tsconfig.spec.json` - TypeScript configuration for tests
+- Test files use `.spec.ts` extension
+
+### Angular Test Coverage
+Current test coverage includes:
+- ✅ CustomerService HTTP operations
+- ✅ API endpoint URL construction
+- ✅ Request/response data handling
+- ✅ Error handling for all HTTP methods
+- ✅ Component initialization and lifecycle
+- ✅ Form submission and validation
+- ✅ CRUD operation integration
+- ✅ User interaction events (click, input)
+- ✅ Modal open/close functionality
+- ✅ Data binding and display
+- ✅ SSR compatibility checks
+
+### Writing New Angular Tests
+To add new tests, create or update `.spec.ts` files:
+
+**Service Test Example:**
+```typescript
+it('should retrieve customer by ID', () => {
+  service.getCustomer(1).subscribe(customer => {
+    expect(customer.id).toBe(1);
+  });
+
+  const req = httpMock.expectOne('http://localhost:5001/customers/1');
+  expect(req.request.method).toBe('GET');
+  req.flush(mockCustomer);
+});
+```
+
+**Component Test Example:**
+```typescript
+it('should create a new customer', fakeAsync(() => {
+  component.newCustomer = { name: 'Test', email: 'test@example.com' };
+  component.onCreate();
+  tick();
+
+  expect(customerService.createCustomer).toHaveBeenCalled();
+}));
+```
+
+### Test Debugging
+If tests fail, check:
+- Browser console in Karma test runner
+- Check network requests in test output
+- Verify mock data matches expected format
+- Ensure HttpClientTestingModule is imported
+
 ## 🎨 Key Features Explained
 
 ### Hierarchical Relationships
@@ -400,7 +516,8 @@ When changing the schema:
 - [ ] Dashboard with analytics
 - [ ] PostgreSQL migration for production
 - [ ] Docker containerization
-- [x] ✅ Unit and integration tests (35 tests with 100% pass rate)
+- [x] ✅ Backend tests: pytest suite (35 tests, 100% pass rate)
+- [x] ✅ Frontend tests: Karma/Jasmine suite (62 tests, 100% pass rate)
 
 ## 📄 License
 
