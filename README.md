@@ -10,6 +10,7 @@ A modern, full-stack Customer Relationship Management (CRM) application built wi
 - **Interactive Data Grid**: Powered by AG Grid Community with custom styling and animations
 - **Data Export**: Export customer data to CSV and Excel formats with one click
 - **Relationship Visualization**: Beautiful modal interface displaying full customer family trees
+- **Navigation Bar**: Modern navigation with About section showing application details
 - **Responsive Design**: Modern gradient UI with glass morphism effects
 - **Real-time Updates**: Live data synchronization between frontend and backend
 

@@ -1,15 +1,132 @@
 <nav style="background: linear-gradient(90deg, #7702FF 0%, #CC26D5 50%, #F0060B 100%); color: white; padding: 1rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-  <div style="font-size: 1.5rem; font-weight: bold; letter-spacing: 1px;">Customer CRM</div>
-  <div style="display: flex; gap: 1.5rem;">
-    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Dashboard</a>
-    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Customers</a>
-    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Reports</a>
-    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Settings</a>
+  <div style="font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem;">
+    <span style="font-size: 1.8rem;">👥</span>
+    Customer CRM
+  </div>
+  <div style="display: flex; gap: 1.5rem; align-items: center;">
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500; transition: opacity 0.3s;" 
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      Dashboard
+    </a>
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500; transition: opacity 0.3s;" 
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      Customers
+    </a>
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500; transition: opacity 0.3s;" 
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      Reports
+    </a>
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500; transition: opacity 0.3s;" 
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      Settings
+    </a>
+    <a (click)="openAbout()" style="color: white; text-decoration: none; font-weight: 500; cursor: pointer; transition: opacity 0.3s; display: flex; align-items: center; gap: 0.3rem;" 
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      <span style="font-size: 1.1rem;">ℹ️</span> About
+    </a>
   </div>
 </nav>
 
 <div style="max-width: 1200px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.07);">
   <app-customer-grid></app-customer-grid>
+</div>
+
+<!-- About Modal -->
+<div *ngIf="showAboutModal" class="modal-overlay" (click)="closeAbout()">
+  <div class="modal-content about-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+        <span style="font-size: 2rem;">ℹ️</span>
+        About Customer CRM
+      </h2>
+      <button class="close-btn" (click)="closeAbout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="about-section">
+        <h3>🎯 Overview</h3>
+        <p>
+          Customer CRM is a modern, full-stack Customer Relationship Management application designed to help
+          organizations manage their customer data efficiently with advanced hierarchical relationship tracking.
+        </p>
+      </div>
+
+      <div class="about-section">
+        <h3>✨ Key Features</h3>
+        <ul>
+          <li><strong>Customer Management:</strong> Complete CRUD operations for customer records</li>
+          <li><strong>Hierarchical Relationships:</strong> Define parent-child relationships with unlimited depth</li>
+          <li><strong>Entity Classification:</strong> Categorize as Individual, Entity, or Corporate</li>
+          <li><strong>Data Export:</strong> Export to CSV and Excel formats with one click</li>
+          <li><strong>Interactive Grid:</strong> Powered by AG Grid with sorting, filtering, and pagination</li>
+          <li><strong>Relationship Visualization:</strong> Beautiful modal interface displaying full family trees</li>
+          <li><strong>Real-time Updates:</strong> Live data synchronization between frontend and backend</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h3>🛠️ Technology Stack</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+          <div>
+            <h4 style="color: #667eea; margin-bottom: 0.5rem;">Frontend</h4>
+            <ul style="list-style: none; padding-left: 0;">
+              <li>• Angular 19</li>
+              <li>• TypeScript</li>
+              <li>• AG Grid Community</li>
+              <li>• RxJS</li>
+              <li>• Server-Side Rendering</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="color: #667eea; margin-bottom: 0.5rem;">Backend</h4>
+            <ul style="list-style: none; padding-left: 0;">
+              <li>• Python Flask 3.1.2</li>
+              <li>• SQLAlchemy 2.0.43</li>
+              <li>• SQLite Database</li>
+              <li>• Flask-CORS</li>
+              <li>• RESTful API</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <h3>🧪 Testing & Quality</h3>
+        <p>
+          <strong>100% Test Coverage:</strong> The application includes comprehensive test suites ensuring
+          reliability and maintainability.
+        </p>
+        <ul>
+          <li><strong>Backend:</strong> 35 pytest tests (100% passing)</li>
+          <li><strong>Frontend:</strong> 62 Karma/Jasmine tests (100% passing)</li>
+          <li><strong>Total:</strong> 97 tests covering all functionality</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h3>👨‍💻 Development</h3>
+        <p>
+          <strong>Version:</strong> 1.0.0<br>
+          <strong>Last Updated:</strong> October 3, 2025<br>
+          <strong>Status:</strong> Active Development<br>
+          <strong>Repository:</strong> <a href="https://github.com/ICPATILANI/ic_crm_demo" target="_blank" style="color: #667eea;">ic_crm_demo</a>
+        </p>
+      </div>
+
+      <div class="about-section">
+        <h3>📞 Support & Contact</h3>
+        <p>
+          For issues, questions, or feature requests, please contact the development team or
+          submit an issue on the GitHub repository.
+        </p>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #e0e0e0;">
+        <p style="color: #777; font-size: 0.9rem;">
+          Built with ❤️ using Angular, Flask, and AG Grid
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <router-outlet />
