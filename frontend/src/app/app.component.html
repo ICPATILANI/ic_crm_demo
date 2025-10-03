@@ -1,0 +1,15 @@
+<nav style="background: linear-gradient(90deg, #7702FF 0%, #CC26D5 50%, #F0060B 100%); color: white; padding: 1rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+  <div style="font-size: 1.5rem; font-weight: bold; letter-spacing: 1px;">Customer CRM</div>
+  <div style="display: flex; gap: 1.5rem;">
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Dashboard</a>
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Customers</a>
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Reports</a>
+    <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Settings</a>
+  </div>
+</nav>
+
+<div style="max-width: 1200px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.07);">
+  <app-customer-grid></app-customer-grid>
+</div>
+
+<router-outlet />
